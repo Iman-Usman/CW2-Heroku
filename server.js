@@ -1,6 +1,6 @@
 // Import dependencies modules:
 const express = require('express')
-// const bodyParser = require('body-parser')
+const bodyParser = require('body-parser')
 //const cors = require("cors");
 //app.use(cors());
 
