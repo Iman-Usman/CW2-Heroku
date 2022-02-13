@@ -1,0 +1,489 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>After School Classes</title>
+    <script src="https://cdn.jsdelivr.net/npm/vue@2.6.14/dist/vue.js"></script>
+    <script src="lessons.js"></script>
+    <link href="https://unpkg.com/tailwindcss@^2/dist/tailwind.min.css" rel="stylesheet"/>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.1/css/all.min.css"/>
+<style>
+     #card {
+          box-shadow: 0 4px 8px 0 rgba(0, 0, 0, 0.2);
+          width:20%;
+          height:50%;
+          margin: 20px;
+          text-align: center;
+          font-family: arial;
+          display: inline-block;
+        }
+        #checkoutcard {
+          box-shadow: 0 4px 8px 0 rgba(0, 0, 0, 0.2);
+          width:15%;
+          height:30%;
+          margin: 20px;
+          text-align: center;
+          font-family: arial;
+          display: inline-block;
+        }
+        #card button {
+          border: none;
+          outline: 0;
+          padding: 12px;
+          color: white;
+          background-color: #000;
+          text-align: center;
+          cursor: pointer;
+          width: 100%;
+          font-size: 18px;
+        }
+        #checkout {
+          border: none;
+          outline: 0;
+          padding: 12px;
+          color: white;
+          background-color: #000;
+          text-align: center;
+          cursor: pointer;
+          width: 300px;
+          font-size: 18px;
+          margin: 20px;
+        }
+        #checkoutdisabled {
+          border: none;
+          outline: 0;
+          padding: 12px;
+          color: white;
+          background-color:gray;
+          text-align: center;
+          cursor: pointer;
+          width: 300px;
+          font-size: 18px;
+          margin: 20px;
+        }
+        
+        #card button:hover {
+          opacity: 0.7;
+        }
+        #checkoutbutton {
+            background-color: black;
+            border: none;
+            color: white;
+            padding:8px 16px;
+            text-align: center;
+            font-size: 18px;
+            margin: 4px 2px;
+            display: inline-block;
+            text-decoration: none;
+            cursor: pointer;
+            border-radius: 4px;
+            width:200px;
+            height:50px;
+            margin-left: 20px;
+        }
+        #Order{
+            border: 2px solid black;
+            border-radius: 4px;
+            background-color:lightgray;
+            font-size: 20px;
+            padding: 5px;
+            margin:20px;
+        }
+        #name {
+            width: 15%;
+            padding: 12px 20px;
+            margin: 8px 0;
+            box-sizing: border-box;
+            border: none;
+            background-color: lightgray;
+            margin-right: 30px;
+            border:2px solid black;
+            border-radius: 4px;
+        }
+        #phone {
+            width: 15%;
+            padding: 12px 20px;
+            margin: 8px 0;
+            box-sizing: border-box;
+            border: none;
+            background-color: lightgray;
+            border:2px solid black;
+            border-radius: 4px;
+         }
+        #checkoutpage{
+            text-align: center;
+            border-radius: 4px;
+            height:180px;
+            padding: 20px;
+        }
+</style>
+  </head>
+  <body>
+    <h1 style="color: black; font-size: 40px; font-weight: bold; text-align: center;">After School Classes & Activities</h1>
+    <div id="app">
+        <header>
+            <!--Checkout page-->
+            <button id="checkout" v-on:click="showCheckout" v-if="canaddtocart">
+                {{canaddtocart}}
+                <span class="fas fa-shopping-cart"></span> Checkout          
+            </button>
+            <button id="checkoutdisabled" disabled = "disabled" v-else>                
+                <span class="fas fa-shopping-cart"></span> Checkout          
+            </button>
+            <div v-if="showProduct" id="checkoutpage">
+                <h2 style="font-size:30px; font-weight: bold; margin-bottom: 20px;"> Checkout </h2>
+                <p><form name="theform">
+                <strong style="font-size: 25px;">Name: </strong> <input type="text" onKeyup="checkform()" onkeypress="return allowOnlyLetters(event,this);" id="name" required/>
+                <strong style="font-size: 25px;">Phone: </strong> <input type="text" onKeyup="checkform()" onkeypress="return ValidNumeric()" id="phone" required/>
+              <input id="checkoutbutton" type="submit" disabled="disabled" v-on:click="submitForm" value="submit" />
+            </form>
+                </p>
+            </div>
+        </header>
+        <div>
+        <div id="checkoutcard" v-for="(lessons, index) in cart" v-if="showProduct" >
+          <img style="width: 100%; height: 100px;" v-bind:src="lessons.image"/>
+          <div>
+            <p>Subject: {{ lessons.subject }}</p>
+            <p>Location: {{ lessons.location }}</p>
+            <p>Price: ${{ lessons.price }}</p>
+            <button
+            v-on:click="deletefromCart(index)">
+            <i class="fa fa-trash"></i>
+          </button></div></div></div>
+
+          <!--Sorting-->
+          <div>
+            <button>
+                <p style="font-size:25px;">Sort By: </p>
+                <div id="Order"><p v-on:click="sortLessons('subject')">Subject</p>
+                  <p v-on:click="sortLessons('location')">Location</p>
+                  <p v-on:click="sortLessons('price')">Price</p>
+                  <p v-on:click="sortLessons('spaces')">Space</p>
+                
+                </div>
+                <div id="Order">
+                  <p v-on:click="sortAscending">Ascending</p>
+                  <p v-on:click="sortDescending">Descending</p>
+                </div></button></div>
+                
+            <!--Products page-->
+            <div>
+                <div>
+              <div id="card" v-for="a in lessons">
+            <img style="width: 100%; height: 200px;" v-bind:src="a.image"/>
+            <div>
+              <p><strong>{{ a.subject }}</strong></p>
+              <p><strong>Price: </strong>${{ a.price }}</p>
+              <p><strong>Location: </strong>{{ a.location }}</p>
+              <p><strong>Spaces: </strong>{{ a.spaces }}</p><br />
+
+              <button id="button" v-if="canAddToCart(a)"
+                v-on:click="addToCart(a)">
+                Add to Cart
+              </button>
+
+              <button disabled='disabled' v-else>
+                Add to Cart
+              </button></div></div></div></div></div>
+
+    <script>
+      let afterschool = new Vue({
+        el: "#app",
+        data: {
+          lessons: lessons,
+          orderBy: 0,
+          sortBy: "",
+          cart: [],
+          showProduct: false,
+        },
+
+        methods: {
+            submitForm(){
+                alert('Order Submitted!')
+            },
+
+          showCheckout(){
+                this.showProduct = this.showProduct ? false : true;
+            },
+
+          addToCart: function (lesson) {
+            if (lesson.spaces > 0) {
+              console.log(this.lessons.indexOf(lesson));
+              var found = false;
+              var index = 0;
+              var counter = 0;
+              for (a in this.cart) {
+                console.log(this.cart[a].spaces);
+                console.log(lesson.spaces);
+                if (this.cart[a].spaces == lesson.spaces) {
+                  found = true;
+                  index = counter;
+                  console.log("found");
+                }
+                counter++;
+              }
+              if (found) {
+                this.cart[index].quantity += 1;
+              } else {
+                this.cart.push({
+                  id: lesson.id,
+                  subject: lesson.subject,
+                  location: lesson.location,
+                  price: lesson.price,
+                  image: lesson.image,
+                  quantity: 1,
+                });
+              }
+              this.lessons[this.lessons.indexOf(lesson)].spaces -= 1;
+            } else {
+              alert("No more items available");
+            }
+          },
+
+          canAddToCart(lesson) {
+            if (lesson.spaces > 0) {
+              return true;
+            } else {
+              return false;
+            }
+          },
+
+          sortAscending: function () {
+            if (this.orderBy == 1) {
+              console.log(this.sortBy);
+              switch (this.sortBy) {
+                case "subject":
+                  lessons.sort(function (a, b) {
+                    let x = a.subject.toLowerCase();
+                    let y = b.subject.toLowerCase();
+                    if (x < y) {
+                      return -1;
+                    }
+                    if (x > y) {
+                      return 1;
+                    }
+                    return 0;
+                  });
+                  break;
+                case "location":
+                  lessons.sort(function (a, b) {
+                    let x = a.location.toLowerCase();
+                    let y = b.location.toLowerCase();
+                    if (x < y) {
+                      return -1;
+                    }
+                    if (x > y) {
+                      return 1;
+                    }
+                    return 0;
+                  });
+                  break;
+                case "price":
+                  lessons.sort(function (a, b) {
+                    return a.price - b.price;
+                  });
+                  break;
+                case "spaces":
+                  lessons.sort(function (a, b) {
+                    return a.spaces - b.spaces;
+                  });
+                  break;
+                default:
+                  lessons.sort(function (a, b) {
+                    let x = a.subject.toLowerCase();
+                    let y = b.subject.toLowerCase();
+                    if (x < y) {
+                      return -1;
+                    }
+                    if (x > y) {
+                      return 1;
+                    }
+                    return 0;
+                  });
+                  break;
+              }
+              this.orderBy = 0;
+              this.$forceUpdate();
+            }
+          },
+
+          sortDescending: function () {
+            if (this.orderBy == 0) {
+              switch (this.sortBy) {
+                case "subject":
+                  lessons.sort(function (a, b) {
+                    let x = a.subject.toLowerCase();
+                    let y = b.subject.toLowerCase();
+                    if (x > y) {
+                      return -1;
+                    }
+                    if (x < y) {
+                      return 1;
+                    }
+                    return 0;
+                  });
+                  break;
+                case "location":
+                  lessons.sort(function (a, b) {
+                    let x = a.location.toLowerCase();
+                    let y = b.location.toLowerCase();
+                    if (x > y) {
+                      return -1;
+                    }
+                    if (x < y) {
+                      return 1;
+                    }
+                    return 0;
+                  });
+                  break;
+                case "price":
+                  lessons.sort(function (a, b) {
+                    return b.price - a.price;
+                  });
+                  break;
+                case "spaces":
+                  lessons.sort(function (a, b) {
+                    return b.spaces - a.spaces;
+                  });
+                  break;
+                default:
+                  lessons.sort(function (a, b) {
+                    let x = a.subject.toLowerCase();
+                    let y = b.subject.toLowerCase();
+                    if (x > y) {
+                      return -1;
+                    }
+                    if (x < y) {
+                      return 1;
+                    }
+                    return 0;
+                  });
+                  break;
+              }
+              this.orderBy = 1;
+              console.log(lessons);
+            }
+          },
+
+          sortLessons: function (sortBy) {
+            switch (sortBy) {
+              case "subject":
+                this.sortBy = "subject";
+                lessons.sort(function (a, b) {
+                  let x = a.subject.toLowerCase();
+                  let y = b.subject.toLowerCase();
+                  if (x < y) {
+                    return -1;
+                  }
+                  if (x > y) {
+                    return 1;
+                  }
+                  return 0;
+                });
+                break;
+              case "location":
+                this.sortBy = "location";
+                lessons.sort(function (a, b) {
+                  let x = a.location.toLowerCase();
+                  let y = b.location.toLowerCase();
+                  if (x < y) {
+                    return -1;
+                  }
+                  if (x > y) {
+                    return 1;
+                  }
+                  return 0;
+                });
+                break;
+              case "price":
+                this.sortBy = "price";
+                lessons.sort(function (a, b) {
+                  return a.price - b.price;
+                });
+                break;
+              case "spaces":
+                this.sortBy = "spaces";
+                lessons.sort(function (a, b) {
+                  return a.spaces - b.spaces;
+                });
+                break;
+              default:
+                break;
+            }
+          },
+
+          deletefromCart: function (index) {
+            const lessonData = this.cart[index];
+            console.log(lessonData);
+            this.cart.splice(index, 1);
+            for (a in this.lessons) {
+              if (this.lessons[a].id == lessonData.id) {
+                this.lessons[a].spaces += lessonData.quantity;
+              }
+            }
+          },
+
+        },
+        computed: {
+          canaddtocart() {
+            return this.cart.length
+          },
+
+        },
+      });
+    </script>
+            <script language="Javascript" type="text/javascript">    
+            
+                function allowOnlyLetters(e, t)   
+        {    
+           if (window.event)    
+           {    
+              var charCode = window.event.keyCode;    
+           }    
+           else if (e)   
+           {    
+              var charCode = e.which;    
+           }    
+           else { return true; }    
+           if ((charCode > 64 && charCode < 91) || (charCode > 96 && charCode < 123))    
+               return true;    
+           else  
+           {    
+              alert("ENTER ALPHABETS ONLY");    
+              return false;    
+           }           
+        }
+        
+        function ValidNumeric() {    
+        
+        var charCode = (event.which) ? event.which : event.keyCode;    
+        if (charCode >= 48 && charCode <= 57)    
+        { return true; }    
+        else    
+        { 
+            alert("ENTER NUMBERS ONLY");
+            return false; 
+        }    
+    } 
+    function checkform()
+    {
+        var f = document.forms["theform"].elements;
+        var cansubmit = true;
+    
+        for (var i = 0; i < f.length; i++) {
+            if (f[i].value.length == 0) cansubmit = false;
+        }
+    
+        if (cansubmit) {
+            document.getElementById('checkoutbutton').disabled = false;
+        }
+        else {
+            document.getElementById('checkoutbutton').disabled = 'disabled';
+        }
+    }
+          </script> 
+  </body>
+</html>
