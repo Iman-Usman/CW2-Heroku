@@ -22,6 +22,7 @@ MongoClient.connect('mongodb+srv://iman:dohaqatar1@cluster0.ovv1s.mongodb.net/te
     db = client.db('webstore')
 })
 
+
 // dispaly a message for root path to show that API is working
 app.get('/', (req, res, next) => {
     res.send('Select a collection, e.g., /collection/messages')
