@@ -1,0 +1,33 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Fetch Get</title>
+</head>
+<body>
+    <div id='store'>{{lesson}}</div>
+
+    <script>
+        let store = new Vue({
+            data: {
+                lesson: {},
+            },
+            // this function runs when creating the Vue instance
+            created: function() {
+                // replace the URL to your Heroku app and route    
+                fetch('https://cw2-iman.herokuapp.com/collection/lesson').then(
+                    function (response) {        
+                        response.json().then(
+                            function (json) {
+                                store.lesson = json;          
+                            });      
+                        })  
+                    }
+                })
+
+    </script>
+</body>
+
+</html>
