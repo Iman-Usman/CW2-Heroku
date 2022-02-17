@@ -14,13 +14,22 @@ app.use ((req,res,next) => {
     next();
 })
 
-// the 'logger' middleware
+// the 'logger' middleware that outputs requests to server console 
 app.use(function(req, res, next) {
     console.log("Request IP: " + req.url);
     console.log("Request date: " + new Date());
     next();
 });
 
+//static file middleware that returns lesson images
+var publicPath = path.resolve(__dirname,"public");
+var imagePath = path.resolve(__dirname,"image");
+app.use('/public',express.static(publicPath));
+app.use('/images',express.static(imagePath));
+app.use(function(req, res){
+    res.status(404);
+    res.send("Error: File not found");
+});
 
 // connect to MongoDB
 const MongoClient = require('mongodb').MongoClient;
