@@ -3,12 +3,9 @@ const express = require('express')
 const bodyParser = require('body-parser')
 //const cors = require("cors");
 //app.use(cors());
-
 var path = require("path");
-
 // Create an Express.js instance:
 const app = express()
-
 // config Express.js
 app.use(express.json())
 app.set('port', 3000)
@@ -16,6 +13,14 @@ app.use ((req,res,next) => {
     res.setHeader('Access-Control-Allow-Origin', '*');
     next();
 })
+
+// the 'logger' middleware
+app.use(function(req, res, next) {
+    console.log("Request IP: " + req.url);
+    console.log("Request date: " + new Date());
+    next();
+});
+
 
 // connect to MongoDB
 const MongoClient = require('mongodb').MongoClient;
