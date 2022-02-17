@@ -21,23 +21,12 @@ app.use(function(req, res, next) {
     next();
 });
 
-//static file middleware that returns lesson images
-var publicPath = path.resolve(__dirname,"public");
-var imagePath = path.resolve(__dirname,"image");
-app.use('/public',express.static(publicPath));
-app.use('/images',express.static(imagePath));
-app.use(function(req, res){
-    res.status(404);
-    res.send("Error: File not found");
-});
-
 // connect to MongoDB
 const MongoClient = require('mongodb').MongoClient;
 let db;
 MongoClient.connect('mongodb+srv://iman:dohaqatar1@cluster0.ovv1s.mongodb.net/test', (err, client) => {
     db = client.db('webstore')
 })
-
 
 // dispaly a message for root path to show that API is working
 app.get('/', (req, res, next) => {
@@ -68,7 +57,6 @@ res.send(results.ops)
 })
 
 // return with object id 
-
 const ObjectID = require('mongodb').ObjectID;
 app.get('/collection/:collectionName/:id'
 , (req, res, next) => {
@@ -77,7 +65,6 @@ if (e) return next(e)
 res.send(result)
 })
 })
-
 
 //update an object 
 app.put('/collection/:collectionName/:id', (req, res, next) => {
@@ -92,6 +79,7 @@ res.send(result.modifiedCount === 1 ? { msg: "success" } : { msg: "error" })
 })
 })
 
+//delete an object 
 app.delete('/collection/:collectionName/:id', (req, res, next) => {
 req.collection.deleteOne(
 { _id: ObjectID(req.params.id) },(e, result) => {
