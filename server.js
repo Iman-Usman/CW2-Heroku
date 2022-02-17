@@ -17,16 +17,6 @@ app.use ((req,res,next) => {
     next();
 })
 
-var publicPath = path.resolve(__dirname,"public");
-var imagePath = path.resolve(__dirname,"image");
-app.use('/public',express.static(publicPath));
-app.use('/images',express.static(imagePath));
-app.use(function(request, response, next){
-    response.writeHead(200, {"Content-Type": "text/plain"});
-    response.end("not found");
-    next();
-});
-
 // connect to MongoDB
 const MongoClient = require('mongodb').MongoClient;
 let db;
