@@ -6,7 +6,6 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>After School Classes</title>
     <script src="https://cdn.jsdelivr.net/npm/vue@2.6.14/dist/vue.js"></script>
-    <script src="lessons.js"></script>
     <link href="https://unpkg.com/tailwindcss@^2/dist/tailwind.min.css" rel="stylesheet"/>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.1/css/all.min.css"/>
 <style>
@@ -193,16 +192,45 @@
       let afterschool = new Vue({
         el: "#app",
         data: {
-          lessons: lessons,
+          lessons: [],
           orderBy: 0,
           sortBy: "",
           cart: [],
           showProduct: false,
         },
+        created: function(){
+          // replace the URL to your Heroku app and route    
+          fetch('https://cw2-iman.herokuapp.com/collection/lesson').then(
+                    function (response) {        
+                        response.json().then(
+                            function (json) {
+                              afterschool.lessons = json;          
+                            });      
+                        })  
+        },
 
         methods: {
             submitForm(){
-                alert('Order Submitted!')
+                 alert('Order Submitted!')
+                var name = document.getElementById("name").value;
+                console.log(name);
+                const newProduct = { "name" : name, subject:"Cooking",location:"Middlesex",price:1300,spaces:5 };
+
+                //set the url to your server and route
+                fetch('https://cors-anywhere.herokuapp.com/cw2-iman.herokuapp.com/collection/order', {
+                    method: 'POST', // set the HTTP method as 'POST'
+                    headers: {
+                        'Content-Type': 'application/json', // set the data type as JSON
+                    },
+                    body: JSON.stringify(newProduct), // need to stringify the JSON object
+                })
+                    .then(response => response.json())
+                    .then(responseJSON => {
+                        document.getElementById('response').innerText = JSON.stringify(responseJSON);
+                    })
+                    .catch((error) => {
+                        document.getElementById('error').innerText = error;
+                    });
             },
 
           showCheckout(){
