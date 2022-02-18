@@ -101,10 +101,9 @@
 
         methods: {
             submitForm(){
-                 alert('Order Submitted!')
                 var name = document.getElementById("name").value;
-                console.log(name);
-                const newProduct = { "name" : name, subject:"Cooking",location:"Middlesex",price:1300,spaces:5 };
+                var phone = document.getElementById("phone").value;
+                const newProduct = { name , phone , lessonid : 1011 , spaces : 2};
 
                 //set the url to your server and route
                 fetch('https://cors-anywhere.herokuapp.com/cw2-iman.herokuapp.com/collection/order', {
@@ -121,6 +120,7 @@
                     .catch((error) => {
                         document.getElementById('error').innerText = error;
                     });
+                    alert('Order Submitted!')
             },
 
           showCheckout(){
