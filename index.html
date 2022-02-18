@@ -8,116 +8,7 @@
     <script src="https://cdn.jsdelivr.net/npm/vue@2.6.14/dist/vue.js"></script>
     <link href="https://unpkg.com/tailwindcss@^2/dist/tailwind.min.css" rel="stylesheet"/>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.1/css/all.min.css"/>
-<style>
-     #card {
-          box-shadow: 0 4px 8px 0 rgba(0, 0, 0, 0.2);
-          width:20%;
-          height:50%;
-          margin: 20px;
-          text-align: center;
-          font-family: arial;
-          display: inline-block;
-        }
-        #checkoutcard {
-          box-shadow: 0 4px 8px 0 rgba(0, 0, 0, 0.2);
-          width:15%;
-          height:30%;
-          margin: 20px;
-          text-align: center;
-          font-family: arial;
-          display: inline-block;
-        }
-        #card button {
-          border: none;
-          outline: 0;
-          padding: 12px;
-          color: white;
-          background-color: #000;
-          text-align: center;
-          cursor: pointer;
-          width: 100%;
-          font-size: 18px;
-        }
-        #checkout {
-          border: none;
-          outline: 0;
-          padding: 12px;
-          color: white;
-          background-color: #000;
-          text-align: center;
-          cursor: pointer;
-          width: 300px;
-          font-size: 18px;
-          margin: 20px;
-        }
-        #checkoutdisabled {
-          border: none;
-          outline: 0;
-          padding: 12px;
-          color: white;
-          background-color:gray;
-          text-align: center;
-          cursor: pointer;
-          width: 300px;
-          font-size: 18px;
-          margin: 20px;
-        }
-        
-        #card button:hover {
-          opacity: 0.7;
-        }
-        #checkoutbutton {
-            background-color: black;
-            border: none;
-            color: white;
-            padding:8px 16px;
-            text-align: center;
-            font-size: 18px;
-            margin: 4px 2px;
-            display: inline-block;
-            text-decoration: none;
-            cursor: pointer;
-            border-radius: 4px;
-            width:200px;
-            height:50px;
-            margin-left: 20px;
-        }
-        #Order{
-            border: 2px solid black;
-            border-radius: 4px;
-            background-color:lightgray;
-            font-size: 20px;
-            padding: 5px;
-            margin:20px;
-        }
-        #name {
-            width: 15%;
-            padding: 12px 20px;
-            margin: 8px 0;
-            box-sizing: border-box;
-            border: none;
-            background-color: lightgray;
-            margin-right: 30px;
-            border:2px solid black;
-            border-radius: 4px;
-        }
-        #phone {
-            width: 15%;
-            padding: 12px 20px;
-            margin: 8px 0;
-            box-sizing: border-box;
-            border: none;
-            background-color: lightgray;
-            border:2px solid black;
-            border-radius: 4px;
-         }
-        #checkoutpage{
-            text-align: center;
-            border-radius: 4px;
-            height:180px;
-            padding: 20px;
-        }
-</style>
+    <link rel="stylesheet" href="style.css"/>
   </head>
   <body>
     <h1 style="color: black; font-size: 40px; font-weight: bold; text-align: center;">After School Classes & Activities</h1>
@@ -199,7 +90,6 @@
           showProduct: false,
         },
         created: function(){
-          // replace the URL to your Heroku app and route    
           fetch('https://cw2-iman.herokuapp.com/collection/lesson').then(
                     function (response) {        
                         response.json().then(
@@ -207,7 +97,7 @@
                               afterschool.lessons = json;          
                             });      
                         })  
-        },
+                      },
 
         methods: {
             submitForm(){
