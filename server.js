@@ -89,5 +89,14 @@ res.send((result.deletedCount === 1) ?
 })
 })
 
+//static file middleware that returns lesson images
+var imagePath = path.resolve(__dirname,"images");
+app.use('/images',express.static(imagePath));
+app.use(function(req, res, next){
+    res.status(404);
+    res.send("Error: File not found");
+    next();
+});
+
 const port = process.env.PORT || 3000
 app.listen(port)
