@@ -45,7 +45,7 @@ let lessons=[
     location: "Downtown Dubai",
     price: 2500,
     spaces: 5,
-    image: "images/robotics.jpg",
+    image: "images/Robotics.jpg",
 },
 {
     id:1007,
