@@ -4,7 +4,7 @@ const app = express();
 
 //static file middleware that returns lesson images
 var publicPath = path.resolve(__dirname,"public");
-var imagePath = path.resolve(__dirname,"image");
+var imagePath = path.resolve(__dirname,"images");
 app.use('/public',express.static(publicPath));
 app.use('/images',express.static(imagePath));
 app.use(function(req, res){
